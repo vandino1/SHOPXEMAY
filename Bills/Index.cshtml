@@ -1,0 +1,71 @@
+﻿@model IEnumerable<HondaVN.Models.Bill>
+
+@{
+    ViewData["Title"] = "Trang hóa đơn";
+}
+
+<h1 class="text-secondary">Hóa đơn khách hàng</h1>
+
+<p>
+    <a asp-action="Create" class="btn btn-info"><i class="bi bi-plus-circle"></i> Tạo hóa đơn mới</a>
+</p>
+<!-- Hiển  thị thông báo alert-->
+@if (TempData["AlertMessage"] != null)
+{
+    <div class="alert alert-info">
+        <strong>Thông báo! </strong>@TempData["AlertMessage"]
+        <button type="button" class="close" data-dismiss="alert">
+            <span>&times;</span>
+            @*<span>x</span>*@
+        </button>
+    </div>
+}
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Date)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CustomerName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CustomerPhone)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CustomerAddress)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.BillTotal)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Date)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CustomerName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CustomerPhone)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CustomerAddress)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.BillTotal)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.BillId" class="btn btn-warning"><i class="bi bi-pencil-square"></i>Cập nhật</a> |
+                    <a asp-action="Details" asp-route-id="@item.BillId" class="btn btn-info"><i class="bi bi-sliders"></i>Chi tiết</a> |
+                    <a asp-action="Delete" asp-route-id="@item.BillId" class="btn btn-danger"><i class="bi bi-trash"></i>Xóa</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
