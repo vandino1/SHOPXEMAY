@@ -1,0 +1,61 @@
+﻿@model IEnumerable<HondaVN.Models.Contact>
+
+@{
+    ViewData["Title"] = "Danh sách liên hệ";
+}
+
+<h1 class="text-dark">Danh sách liên hệ</h1>
+<!-- Hiển  thị thông báo alert-->
+@if (TempData["AlertMessage"] != null)
+{
+    <div class="alert alert-danger">
+        <strong>Thông báo! </strong>@TempData["AlertMessage"]
+        <button type="button" class="close" data-dismiss="alert">
+            <span>&times;</span>
+            @*<span>x</span>*@
+        </button>
+    </div>
+}
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.FullName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Email)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DateSent)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Phone)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FullName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Email)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DateSent)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Phone)
+                </td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-success"><i class="bi bi-sliders"></i>Xem chi tiết</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger"><i class="bi bi-trash"></i>Xóa</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

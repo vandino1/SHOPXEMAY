@@ -1,0 +1,47 @@
+﻿@model IEnumerable<HondaVN.Models.Product>
+
+@{
+    ViewData["Title"] = "Trang chính";
+}
+
+<!--Code vô đây-->
+<h1 class="text-danger">Danh sách mặt hàng</h1>
+<!-- Hiển  thị thông báo alert-->
+@if (TempData["AlertMessage"] != null)
+{
+    <div class="alert alert-warning">
+        <strong>Thông báo! </strong>@TempData["AlertMessage"]
+        <button type="button" class="close" data-dismiss="alert">
+            <span>&times;</span>
+        </button>
+    </div>
+}
+<div class="row">
+    @foreach (var item in Model)
+    {
+        <div class="col-sm-3">
+            <div class="card text-center m-2 shadow">
+                <div class="card-header bg-light">
+                    <h6><a class="text-dark text-decoration-none" asp-action="Details" asp-route-id="@item.Id">@Html.DisplayFor(modelItem => item.Name)</a></h6>
+                </div>
+                <div class="card-body text-center">
+                    <a asp-action="Details" asp-route-id="@item.Id">
+                        <img src="~/images/@Html.DisplayFor(modelItem => item.Image)" max-width="100px" class="card-img" />
+                    </a>
+                    <p>Hãng sản xuất: <span class="text-info">@Html.DisplayFor(modelItem => item.Manufacturer)</span></p>
+                    <p><strong>Giá bán: <span class="text-danger">@Html.DisplayFor(modelItem => item.Price)</span></strong></p>
+                </div>
+                <div class="card-footer">
+                    <a class="btn btn-outline-danger" asp-action="Details" asp-route-id="@item.Id"><i class="bi bi-sliders"></i>Chi tiết</a>
+                    <a class="btn btn-warning" asp-action="AddToCart" asp-route-id="@item.Id"><i class="bi bi-cart-check"></i>Chọn mua</a>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+
+
+
+
+

@@ -1,0 +1,113 @@
+﻿@model PaginatedList<HondaVN.Models.Product>
+
+@{
+    ViewData["Title"] = "Trang danh sách sản phẩm";
+}
+@using PagedList.Mvc;
+@using PagedList;
+
+<h1 class="text-dark">Danh sách sản phẩm</h1>
+
+<a a asp-action="Create" class="btn btn-success"><i class="bi bi-plus-circle"></i> Tạo mới sản phẩm</a>
+<hr />
+
+<form asp-controller="Products" asp-action="Index" method="get">
+    <p>
+        Nhập nội dung: <input type="text" name="SearchString" placeholder="Search Tên hoặc hãng sản xuất" value="@ViewData["CurrentFilter"]" style="width:300px" />
+        <input type="submit" value="Search" class="btn btn-info" /> |      
+        <a asp-action="Index" class="btn btn-secondary text-light"><i class="bi bi-arrow-counterclockwise"></i><i class="w3-jumbo w3-spin fa fa-home"></i>Hiển thị tất cả sản phẩm</a> |
+        <a asp-action="DowloadExcel" asp-controller="Products" class="btn btn-success"><i class="bi bi-file-earmark-excel"></i> Excel</a>
+    </p>
+    
+</form>
+
+<!-- Hiển  thị thông báo alert-->
+@if (TempData["AlertMessage"] != null)
+{
+    <div class="alert alert-success">
+        <strong>Thông báo! </strong>@TempData["AlertMessage"]
+        <button type="button" class="close" data-dismiss="alert">
+            <span>&times;</span>
+            @*<span>x</span>*@
+        </button>
+    </div>
+}
+
+<table class="table">
+    <thead>
+        <tr>
+
+            <th>              
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["NameSortParm"]"asp-route-currentFilter="@ViewData["CurrentFilter"]">@Html.DisplayNameFor(model => model.First().Name)</a>
+            </th>
+
+            <th>
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["ManafuturerSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">@Html.DisplayNameFor(model => model.First().Manufacturer)</a>
+            </th>
+            <th>
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["SortbyPrice"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">@Html.DisplayNameFor(model => model.First().Price)</a>
+            </th>
+            <th>
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["SortbyQuantity"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">@Html.DisplayNameFor(model => model.First().Quantity)</a>
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.First().Desciption)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.First().Image)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Manufacturer)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Price)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Quantity)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Desciption)
+                </td>
+                <td>
+                    <img src="~/images/@Html.DisplayFor(modelItem => item.Image)" width="100" />
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning"><i class="bi bi-pencil-square"></i>Sửa</a> |
+                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info"><i class="bi bi-sliders"></i>Chi tiết</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger"><i class="bi bi-trash"></i>Xóa</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+    @{
+        var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
+        var nextDisabled = !Model.HasNextPage ? "disabled" : "";
+    }
+
+    <a asp-action="Index"
+       asp-route-sortOrder="@ViewData["CurrentSort"]"
+       asp-route-pageNumber="@(Model.PageIndex - 1)"
+       asp-route-currentFilter="@ViewData["CurrentFilter"]"
+       class="btn btn-default @prevDisabled">
+        Trước
+    </a>
+    <a asp-action="Index"
+       asp-route-sortOrder="@ViewData["CurrentSort"]"
+       asp-route-pageNumber="@(Model.PageIndex + 1)"
+       asp-route-currentFilter="@ViewData["CurrentFilter"]"
+       class="btn btn-default @nextDisabled">
+        Tiếp theo
+    </a>
