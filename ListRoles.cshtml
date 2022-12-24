@@ -1,0 +1,111 @@
+﻿@model IEnumerable<Microsoft.AspNetCore.Identity.IdentityRole>
+@{
+    ViewData["Title"] = "Danh sách các Role";
+
+}
+
+<h1 class="text-danger">@ViewData["Title"]</h1>
+
+@if (TempData["AlertMessage"] != null)
+{
+    <div class="alert alert-primary">
+        <strong>Thông báo! </strong>@TempData["AlertMessage"]
+        <button type="button" class="close" data-dismiss="alert">
+            <span>&times;</span>
+        </button>
+    </div>
+}
+
+@if (Model.Any())
+{
+    <a class="btn btn-success mb-3" style="width:auto"
+       asp-controller="Admin" asp-action="CreateRole">
+        <i class="bi bi-plus-circle"></i>
+        Tạo Role mới
+    </a>
+    <hr />
+    foreach (var role in Model)
+    {
+        <div class="card-mb3">
+            <div class="card-header">
+                Role Id : @role.Id
+            </div>
+            <br />
+            <div class="card-body">
+                <h5 class="card-title">@role.Name</h5>
+
+            </div>
+            <hr />
+            <div class="card-footer">
+                <form method="post" asp-action="DeleteRole" asp-route-id="@role.Id">
+
+                    <a class="btn btn-warning" asp-action="EditRole"
+                       asp-controller="Admin" asp-route-id="@role.Id">
+                        <i class="bi bi-pencil-square"></i>
+                        Cập nhật
+                    </a> |
+
+                    <span id="confirmationDelete_@role.Id" style="display:none">
+                        <span>
+                            Bạn có chắc chắn muốn xóa?
+                        </span>
+                        <button type="submit" class="btn btn-success"><i class="bi bi-check"></i>Yes</button>
+                        <a href="#" class="btn btn-outline-danger" onclick="confirmationDelete('@role.Id', false)">
+                            <i class="bi bi-x"></i>No
+                        </a>
+                    </span>
+                    <span id="deleteSpan_@role.Id">
+                        <a href="#" class="btn btn-danger" onclick="confirmationDelete('@role.Id', true)">
+                            <i class="bi bi-trash"></i>Xóa
+                        </a>
+                    </span>
+
+                </form>
+
+            </div>
+        </div>
+
+
+    }
+
+}
+else
+{
+    <div class="card">
+        <div class="card-header">
+            No roles created yet
+        </div>
+        <div class="card-body">
+            <h5 class="card-title">
+                Sử dụng nút bên dưới để tạo Role(vai trò)
+            </h5>
+            <a class="btn btn-success" style="width:auto"
+               asp-controller="Admin" asp-action="CreateRole">
+                <i class="bi bi-plus-circle"></i>
+                Tạo Role mới
+            </a>
+
+        </div>
+    </div>
+
+}
+
+@section Scripts{
+    <script>
+        function confirmationDelete(uniqueId, isDeleteClicked) {
+            var deleteSpan = "deleteSpan_" + uniqueId
+            var confirmationDelete = "confirmationDelete_" + uniqueId
+            if (isDeleteClicked) {
+                $('#' + deleteSpan).hide();
+                $('#' + confirmationDelete).show();
+
+            }
+            else {
+                $('#' + deleteSpan).show();
+                $('#' + confirmationDelete).hide();
+
+            }
+        }
+    </script>
+
+}
